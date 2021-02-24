@@ -38,7 +38,7 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<User> getUserById(@PathVariable final Integer userId) {
+	public ResponseEntity<User> getUserById(@PathVariable  final Integer userId) {
 		LOGGER.info("Accessing User GET endpoint /user/{} for application", userId);
 		final Optional<User> result = userService.getUserById(userId);
 		if (result.isPresent()) {

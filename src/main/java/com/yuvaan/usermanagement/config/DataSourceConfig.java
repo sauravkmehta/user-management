@@ -5,6 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * 
+ * @author saurav
+ *
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = "com.yuvaan.usermanagement.repository")
 @EntityScan(basePackages = "com.yuvaan.usermanagement.entity")
