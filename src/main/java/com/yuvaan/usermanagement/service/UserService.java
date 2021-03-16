@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import com.yuvaan.usermanagement.entity.User;
 import com.yuvaan.usermanagement.repository.UserRepository;
 
+/**
+ * 
+ * @author saurav mehta
+ *
+ */
 @Service
 public class UserService {
 

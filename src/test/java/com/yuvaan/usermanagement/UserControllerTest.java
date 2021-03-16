@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.NestedServletException;
 
 import com.yuvaan.usermanagement.controller.UserController;
 import com.yuvaan.usermanagement.entity.User;
@@ -48,7 +50,7 @@ public class UserControllerTest {
 	UserService mockUserService;
 
 	@Test
-	@DisplayName("Test case to validate getUserWithId")
+	@DisplayName("Test case to validate getUser With valid UserId")
 	public void testGetUserWithId() throws Exception {
 		String expectedJson = "{\"id\" : 0, \"firstName\" : \"myFirstName\", \"lastName\" : \"myLastName\", \"username\" : \"username\", \"email\" : \"myemail\", \"dateOfBirth\" : \"2021-02-16\"}";
 		User user = new User("myFirstName", "myLastName", "username","myemail",  LocalDate.of(2021, 2, 16));
@@ -59,9 +61,22 @@ public class UserControllerTest {
 		final MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		JSONAssert.assertEquals(expectedJson, result.getResponse().getContentAsString(), false);
 	}
+	
+	@Test
+	@DisplayName("Test case to validate getUser With InvalidId")
+	public void testGetUserWithInvalidId() throws Exception {
+		when(mockUserService.getUserById(anyInt())).thenReturn(Optional.empty());
+		final RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/usermanagement/user/1")
+				.accept(MediaType.APPLICATION_JSON);
+		Exception exception = Assertions.assertThrows(NestedServletException.class, () -> {
+			mockMvc.perform(requestBuilder).andReturn();
+	    });
+	    Assertions.assertTrue(exception.getMessage().contains("User with userId 1 not found"));
+		
+	}
 
 	@Test
-	@DisplayName("Test case to  validate getUserWithLastName")
+	@DisplayName("Test case to  validate getUser With valid Last Name")
 	public void testGetUserWithLastName() throws Exception {
 		String expectedJson = "[{\"id\" : 0, \"firstName\" : \"saurav\", \"lastName\" : \"mehta\", \"username\" : \"myusername\", \"email\" : \"myemail\", \"dateOfBirth\" : \"2021-02-16\"}]";
 		List<User> userList = new ArrayList<>();
@@ -91,13 +106,26 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Test case to validate delete a User with UserId")
 	public void testDeleteUser() throws Exception {
-		List<User> userList = new ArrayList<>();
-		userList.add(new User("firstName", "lastName",  "username", "email", LocalDate.now()));
+		User user = new User("myFirstName", "myLastName", "username","myemail",  LocalDate.of(2021, 2, 16));
+		when(mockUserService.getUserById(anyInt())).thenReturn(Optional.of(user));
 		doNothing().when(mockUserService).deleteUserById(anyInt());
 		final RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/usermanagement/user/0")
 				.accept(MediaType.APPLICATION_JSON);
 		final MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
 		assertNotNull(result.getResponse().getContentAsString());
+	}
+	
+	@Test
+	@DisplayName("Test case to validate delete a User with invalid UserId")
+	public void testDeleteInvalidUser() throws Exception {
+		when(mockUserService.getUserById(anyInt())).thenReturn(Optional.empty());
+		doNothing().when(mockUserService).deleteUserById(anyInt());
+		final RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/usermanagement/user/0")
+				.accept(MediaType.APPLICATION_JSON);
+		Exception exception = Assertions.assertThrows(NestedServletException.class, () -> {
+			mockMvc.perform(requestBuilder).andReturn();
+	    });
+	    Assertions.assertTrue(exception.getMessage().contains("User with userId 0 not found"));
 	}
 }
