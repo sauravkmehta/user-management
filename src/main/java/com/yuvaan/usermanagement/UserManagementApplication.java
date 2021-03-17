@@ -8,7 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.yuvaan.usermanagement.entity.User;
 import com.yuvaan.usermanagement.service.UserService;
@@ -21,14 +25,26 @@ import com.yuvaan.usermanagement.service.UserService;
  * @author saurav
  *
  */
+@RestController
 @SpringBootApplication
-public class UserManagementApplication {
+public class UserManagementApplication  extends SpringBootServletInitializer{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserManagementApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(UserManagementApplication.class, args);
 	}
+	
+	@Override
+	   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	      return application.sources(UserManagementApplication.class);
+	   }
+	
+	
+	@RequestMapping(value = "/")
+	   public String hello() {
+	      return "Hello World from Tomcat";
+	   }
 
 	@Bean
 	ApplicationRunner applicationRunner(final UserService userService) {
