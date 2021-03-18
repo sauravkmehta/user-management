@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>user-management</artifactId>
-	<version>0.0.1-RELEASE</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>user-management</name>
 	<description>User Management Using Spring Boot</description>
 	<packaging>war</packaging>
@@ -39,13 +39,6 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<!-- JPA/DB -->
-		
-		<!-- Validation dependency -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<!-- Validation dependency -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -53,6 +46,14 @@
 			<scope>provided</scope>
 		</dependency>
 
+		
+		<!-- Validation dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<!-- Validation dependency -->
+		
 		<!-- Dependency for Swagger documentation -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -71,10 +72,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -87,7 +100,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>2.2</version>
+					<version>2.7</version>
 					<configuration>
 						<formats>
 							<format>xml</format>
@@ -102,42 +115,15 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.1</version>
+					<configuration>
+						<argLine>-noverify</argLine>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>jenkins</id>
-			<activation>
-				<property>
-					<name>env.BUILD_NUMBER</name>
-				</property>
-			</activation>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>cobertura-maven-plugin</artifactId>
-							<version>2.2</version>
-							<configuration>
-								<formats>
-									<format>xml</format>
-								</formats>
-							</configuration>
-							<executions>
-								<execution>
-									<phase>package</phase>
-									<goals>
-										<goal>cobertura</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
 </project>
