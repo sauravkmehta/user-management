@@ -28,6 +28,9 @@ import com.yuvaan.usermanagement.service.UserService;
 @RestController
 @SpringBootApplication
 public class UserManagementApplication  extends SpringBootServletInitializer{
+	
+	//Intentional code to show PMD is working
+	private int unusedvariable;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserManagementApplication.class);
 
@@ -41,6 +44,7 @@ public class UserManagementApplication  extends SpringBootServletInitializer{
 	   }
 	
 	
+	//Dummy rest to check if application is deployed
 	@RequestMapping(value = "/")
 	   public String hello() {
 	      return "Hello World from Tomcat";
