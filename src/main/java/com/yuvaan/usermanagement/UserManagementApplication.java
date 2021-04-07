@@ -29,8 +29,6 @@ import com.yuvaan.usermanagement.service.UserService;
 @SpringBootApplication
 public class UserManagementApplication  extends SpringBootServletInitializer{
 	
-	//Intentional code to show PMD is working
-	private int unusedvariable;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserManagementApplication.class);
 
